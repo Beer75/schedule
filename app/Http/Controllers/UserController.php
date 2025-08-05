@@ -53,8 +53,13 @@ class UserController extends Controller
 
         if(Auth::attempt($validated)){
             session(['role' => auth()->user()->role]);
-            $employer=DB::table('employers')->select('employers.school_id')->where('employers.user_id', '=',auth()->user()->id)->first();
-            session(['school_id' => $employer->school_id]);
+            if(auth()->user()->role==='admin'){
+                session(['school_id' => 0]);
+            }
+            else{
+                $employer=DB::table('employers')->select('employers.school_id')->where('employers.user_id', '=',auth()->user()->id)->first();
+                session(['school_id' => $employer->school_id]);
+            }
             return redirect()->route('home');
         }
 

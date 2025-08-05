@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckUserRole;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,7 +19,8 @@ Route::post('/profile_chemail',[UserController::class, 'chemail'])->name('chemai
 //Route::get('/login',[UserController::class, 'authenticate'])->name('login.authenticate');
 
 
-Route::get('/admin', [MainController::class, 'index'])->name('admin.main.index')->middleware(['auth']);
+Route::get('/admin', [MainController::class, 'index'])->name('admin.main.index')->middleware(['auth', 'role:admin']);
+
 
 /***************************
  * Work with user
@@ -34,11 +36,10 @@ Route::get('/admin', [MainController::class, 'index'])->name('admin.main.index')
  *
  */
 
-Route::resource('/admin/schools', SchoolController::class);
-
-Route::get('/admin/users', [UserController::class, 'admin_users'])->name('admin.users.index')->middleware(['auth']);
-Route::get('/admin/users/create', [UserController::class, 'admin_users_create'])->name('admin.users.create')->middleware(['auth']);
-Route::post('/admin/users', [UserController::class, 'admin_users_store'])->name('admin.users.store')->middleware(['auth']);
+Route::resource('/admin/schools', SchoolController::class)->middleware(['auth', 'role:admin']);
+Route::get('/admin/users', [UserController::class, 'admin_users'])->name('admin.users.index')->middleware(['auth', 'role:admin']);
+Route::get('/admin/users/create', [UserController::class, 'admin_users_create'])->name('admin.users.create')->middleware(['auth', 'role:admin']);
+Route::post('/admin/users', [UserController::class, 'admin_users_store'])->name('admin.users.store')->middleware(['auth', 'role:admin']);
 
 // Route::get('/sheduler/users', [UserController::class, 'sheduler_users'])->name('sheduler.users.index')->middleware(['auth']);
 // Route::get('/sheduler/users/create', [UserController::class, 'sheduler_users_create'])->name('sheduler.users.create')->middleware(['auth']);
