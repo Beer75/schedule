@@ -1,0 +1,39 @@
+body{
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    min-height: 100vh;
+    color: #555;
+}
+
+.top{
+    background-color: #ccc;
+    height: 3rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+}
+
+.top > ul{
+    list-style-type: none;
+    flex-grow: 1;
+    display: flex;
+}
+
+.right_menu{
+    justify-content: flex-end;
+}
+
+.top > ul li{
+    margin-left: 2rem;
+    margin-right: 1rem;
+}
+
+.bottom{
+    background-color: #ccc;
+
+    color: #555;
+}

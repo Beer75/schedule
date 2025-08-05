@@ -1,0 +1,13 @@
+body{
+    background-color: darkgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #555;
+}
+
+body input{
+    margin-left: 0.3rem;
+    margin-right: 1rem;
+}
