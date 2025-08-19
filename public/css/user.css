@@ -32,6 +32,28 @@ body{
     margin-right: 1rem;
 }
 
+.center{
+    display: flex;
+    align-items: stretch;
+}
+
+.left{
+    color:#555;
+    width: 10rem;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.left > ul{
+    list-style-type: none;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
 .bottom{
     background-color: #ccc;
 

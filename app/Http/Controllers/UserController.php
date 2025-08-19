@@ -18,8 +18,8 @@ class UserController extends Controller
         if(auth()->user()->role==='admin'){
             return redirect()->route('admin.main.index');
         }
-        if(auth()->user()->role==='sheduler'){
-            return view('user.sheduler');
+        if(auth()->user()->role==='scheduler'){
+            return view('user.scheduler');
         }
         if(auth()->user()->role==='teacher'){
             return view('user.teacher');
@@ -97,14 +97,14 @@ class UserController extends Controller
     public function admin_users()
     {
         // get users
-        // $sheduler_users="select e.fio, s.name as school_name, u.name as user_name
+        // $scheduler_users="select e.fio, s.name as school_name, u.name as user_name
         // from employers e join schools s on s.id=e.school_id join users u on e.user_id=u.id
-        // where u.role='sheduler'
+        // where u.role='scheduler'
         // order by s.name"
-        $sheduler_users=DB::table('employers')->join('schools', 'employers.school_id', '=','schools.id')->join('users', 'employers.user_id', '=','users.id')->select('employers.fio', 'schools.name as school', 'users.name as user')->where('users.role','=','sheduler')->get();
+        $scheduler_users=DB::table('employers')->join('schools', 'employers.school_id', '=','schools.id')->join('users', 'employers.user_id', '=','users.id')->select('employers.fio', 'schools.name as school', 'users.name as user')->where('users.role','=','scheduler')->get();
         // $schools=School::all();
         // dd($schools);
-        return view('admin.users.index', compact('sheduler_users'));
+        return view('admin.users.index', compact('scheduler_users'));
 
     }
 
@@ -120,9 +120,9 @@ class UserController extends Controller
 
     public function admin_users_store(Request $request)
     {
-        $request->merge(['email'=>$request->input('name').'@schedule.def.ru', 'password'=>$request->input('name'), 'role'=>'sheduler']);
-        $new_sheduler=User::create($request->all());
-        $request->merge(['user_id'=>$new_sheduler->id]);
+        $request->merge(['email'=>$request->input('name').'@schedule.def.ru', 'password'=>$request->input('name'), 'role'=>'scheduler']);
+        $new_scheduler=User::create($request->all());
+        $request->merge(['user_id'=>$new_scheduler->id]);
 
         $new_employer=new Employer();
         $new_employer->fio=$request->fio;

@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Users list</h1>
-    @foreach ($sheduler_users as $user)
+    @foreach ($scheduler_users as $user)
         <div>
             <h2>{{ $user->school }}</h2>
             <h2>{{ $user->fio }}</h2>
