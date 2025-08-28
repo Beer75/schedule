@@ -1,7 +1,7 @@
 @extends('layouts.refs')
 
 @section('menu')
-    <ul class="left_menu"><li><a href="{{ route('home') }}">Главная</a></li><li><a href="{{ route('refs.index') }}">Справочники</a></li></ul>
+    <ul class="left_menu"><li><a href="{{ route('home') }}">Расписание</a></li><li><a href="{{ route('schedule.teachers') }}">Учительское расписание</a></li><li><a href="{{ route('schedule.rooms') }}">Расписание по кабинетам</a></li><li><a href="{{ route('refs.index') }}">Справочники</a></li></ul>
 @endsection
 
 @section('left')
@@ -117,8 +117,6 @@
 
     @if($type==='plans')
         <h2>Учебный план</h2>
-
-
         @php
            $first_rec=1;
         @endphp
@@ -152,15 +150,19 @@
 
             @endif
 
-            @if($first_lid==$plan->lid && $first_rec==0)
-                <td>{{ $plan->quantity }}</td>
 
-            @endif
 
             @if($first_lid!=$plan->lid && $first_rec==0)
                 </tr>
-                {{ $first_lid=$plan->lid }}
+                @php
+                    $first_lid=$plan->lid;
+                @endphp
                 <tr><td>{{ $plan->lname}}</td>
+
+            @endif
+
+            @if($first_lid==$plan->lid && $first_rec==0)
+                <td>{{ $plan->quantity }}</td>
 
             @endif
 

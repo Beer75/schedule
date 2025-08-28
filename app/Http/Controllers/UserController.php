@@ -11,19 +11,24 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
+use App\Http\Controllers\Scheduler\ScheduleController;
+
 class UserController extends Controller
 {
 
     public function start(Request $request){
-        if(auth()->user()->role==='admin'){
-            return redirect()->route('admin.main.index');
+
+        switch(auth()->user()->role){
+            case 'admin':
+                return redirect()->route('admin.main.index');
+            case 'scheduler':
+                // return view('scheduler.schedule');
+                return app()->call(ScheduleController::class.'@main');
+                // ,['param' => $value])
+            case 'teacher':
+                return view('user.teacher');
         }
-        if(auth()->user()->role==='scheduler'){
-            return view('user.scheduler');
-        }
-        if(auth()->user()->role==='teacher'){
-            return view('user.teacher');
-        }
+
     }
 
     //

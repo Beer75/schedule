@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\scheduler\RefController;
+use App\Http\Controllers\scheduler\ScheduleController;
 use App\Http\Middleware\CheckUserRole;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,12 @@ Route::post('/refs/plans', [RefController::class, 'store_plans'])->name('refs.pl
 //Route::get('/refs/periods', [RefController::class, 'periods'])->name('refs.periods')->middleware(['auth', 'role:scheduler']);
 //Route::post('/refs/periods', [RefController::class, 'store_periods'])->name('refs.periods.store')->middleware(['auth', 'role:scheduler']);
 
-
+Route::get('/api/schedule_data', [ScheduleController::class, 'getScheduleData'])->name('schedule.data')->middleware(['auth', 'role:scheduler']);
+Route::post('/api/add_lesson', [ScheduleController::class, 'addLesson'])->name('schedule.lesson.add')->middleware(['auth', 'role:scheduler']);
+Route::post('/api/edit_lesson', [ScheduleController::class, 'editLesson'])->name('schedule.lesson.edit')->middleware(['auth', 'role:scheduler']);
+Route::post('/api/del_lesson', [ScheduleController::class, 'delLesson'])->name('schedule.lesson.del')->middleware(['auth', 'role:scheduler']);
+Route::get('/teachers', [ScheduleController::class, 'teachers'])->name('schedule.teachers')->middleware(['auth', 'role:scheduler']);
+Route::get('/rooms', [ScheduleController::class, 'rooms'])->name('schedule.rooms')->middleware(['auth', 'role:scheduler']);
 
 
 

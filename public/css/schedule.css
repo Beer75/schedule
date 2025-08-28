@@ -1,0 +1,167 @@
+.schedule{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-left: 1rem;
+    border: #777 1px solid;
+}
+
+
+.s_row{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #777;
+
+}
+
+.s_weekday{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.s_weekday:nth-child(odd){
+    background-color: #eee;
+}
+
+.s_weekday:nth-child(even){
+    background-color: #ddd;
+}
+
+.s_lesson_row{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.s_lesson_row:nth-child(odd){
+    background-color: #eee;
+}
+.s_lesson_row:nth-child(even){
+    background-color: #ccc;
+}
+
+
+.sc_title{
+    font-size: larger;
+    width: 10rem;
+    text-align: center;
+}
+
+.sr_title{
+    width: 10rem;
+}
+
+.sr_weekday{
+    width: 10rem;
+    text-align: center;
+    align-self: center;
+}
+
+.sс_weekday{
+    text-align: center;
+
+
+}
+
+.sr_npp{
+    width: 10rem;
+    text-align: center;
+}
+
+.sc_npp{
+    width: 3.5rem;
+    text-align: center;
+}
+
+.sc_lesson{
+    width: 3.5rem;
+    text-align: center;
+    display: flex;
+
+}
+
+.sc_r_lesson{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 0.2rem;
+    text-align: center;
+    width: 100%;
+}
+
+.sc_r_lesson > div{
+
+    width: 48%;
+}
+
+.sc_r_lesson:nth-child(n+2){
+    color:#c44;
+}
+
+.sc_lesson:nth-child(odd){
+    background-color: #eee;
+}
+.sc_lesson:nth-child(even){
+    background-color: #ccc;
+}
+
+.active_lesson{
+
+    background-color: rgb(245, 164, 164) !important;
+
+}
+
+
+.sr_lesson
+{
+    width: 10rem;
+    border-left: 1px solid #aaa;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.sr_lesson::after{
+    content: '+';
+}
+
+.sr_g_lesson{
+    border-bottom: 1px solid #333;
+    text-align: center;
+    cursor: pointer;
+}
+
+.teacher_plan{
+    display: flex;
+    padding: 5px;
+
+}
+
+.teacher_plan_lessons{
+    display: flex;
+
+}
+
+.teacher_plan_lesson{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    margin-left: 3px;
+    background-color: #eee;
+    border: #fff solid 2px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+
+.teacher_plan_lesson *{
+    cursor: pointer;
+}
+
+#teacher_plan_room{
+    font-size: x-large;
+    color: #c44;
+}

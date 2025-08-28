@@ -5,5 +5,5 @@
 @endsection
 
 @section('content')
-    Start page
+    Schedules page of scheduler
 @endsection
