@@ -36,6 +36,9 @@
                     <button onclick="addLesson()">Добавить</button>
                     <button onclick="hideModal('addLessonModalForm')">Отменить</button>
                 </div>
+                <div class="errors">
+
+                </div>
 
         </div>
     </div>

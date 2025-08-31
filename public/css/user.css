@@ -99,3 +99,12 @@ body{
 .modal_content > h3{
     margin-top: 5px;
 }
+
+.modal_content > .errors{
+    display: none;
+}
+
+.modal_content > .errors > ul{
+    list-style: none;
+    color: brown;
+}

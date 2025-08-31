@@ -6,6 +6,7 @@ let arrGroups;
 let arrPlan;
 let activeTeacherPeriod=0;
 let activeTeacherEmployer=0;
+let arrCheckError=new Array();
 
 
 async function start(type){
@@ -96,7 +97,9 @@ function clickLesson(event){
             opt.innerHTML=group.num+group.ind+' - '+group.name;
             groupSelect.appendChild(opt);
         });
+        document.getElementById("addLessonModalForm").querySelector('.errors').style.display='none';
         showModal("addLessonModalForm");
+
     }
     if(event.target.classList.contains('sr_g_lesson')){
         setSelect("edit_lesson_lesson_id", event.target.dataset.lid)
@@ -119,6 +122,7 @@ function clickLesson(event){
             opt.innerHTML=group.num+group.ind+' - '+group.name;
             groupSelect.appendChild(opt);
         });
+
         showModal("editLessonModalForm");
     }
 }
@@ -218,6 +222,19 @@ async function addTeacherLesson(tplElem){
 
 }
 
+function checkLesson(period, group, lesson, room, employer){
+    // Check room
+    arrCheckError.length=0;
+    let filteredSchedule=arrSchedule.filter(sch_item => (sch_item.period_id==period && sch_item.rid==room))
+    if(filteredSchedule.length>0)
+        arrCheckError.push('Данный кабинет уже используется в это время');
+
+    filteredSchedule=arrSchedule.filter(sch_item => (sch_item.period_id==period && sch_item.eid==employer))
+    if(filteredSchedule.length>0)
+        arrCheckError.push('Данный преподаватель уже ведет урок в это время');
+
+    return arrCheckError.length==0;
+}
 
 
 async function addLesson(){
@@ -229,6 +246,21 @@ async function addLesson(){
     let room=document.getElementById('add_lesson_room_id').value;
     let employer=document.getElementById('add_lesson_employer_id').value;
 
+    let resCheckLesson=checkLesson(period, group, lesson, room, employer);
+    if(!resCheckLesson){
+        // alert('There is some errors!');
+        let errdiv = document.getElementById('addLessonModalForm').querySelector('.errors');
+        errdiv.innerHTML='';
+        let errList=document.createElement('ul');
+        arrCheckError.forEach(err=>{
+            let errItem=document.createElement('li')
+            errItem.innerText=err;
+            errList.appendChild(errItem);
+        });
+        errdiv.appendChild(errList);
+        errdiv.style.display='block';
+        return;
+    }
 
     let params={pid: period, gid: group, lid:lesson, rid:room, eid:employer};
     hideModal('addLessonModalForm');

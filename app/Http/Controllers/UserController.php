@@ -38,6 +38,7 @@ class UserController extends Controller
         //     'name' => 'Admin',
         //     'email' => 'schedule_admin@schedule.def.ru',
         //     'password' => 'Beer1975!',
+        //     'role' => 'admin',
         // ]);
         return view('user.login');
     }
