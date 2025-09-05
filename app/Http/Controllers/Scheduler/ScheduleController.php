@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Session;
 
 use App\Models\Schedule;
 
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
+
 class ScheduleController extends Controller
 {
     //
@@ -137,6 +143,126 @@ class ScheduleController extends Controller
 
         $result['status']=$count;
         return response()->json($result);
+
+
+    }
+
+
+    public function export(Request $request){
+        $xlsx_files=array();
+        foreach(glob(public_path('files/'.Session::get('school_id').'-*.xlsx')) as $file){
+            $xlsx_files[] = basename($file);
+        }
+        return view('scheduler.export', compact('xlsx_files'));
+    }
+
+    public function make_export(Request $request){
+        $startCol=3;
+        $startRow=2;
+        $startColTeacher=2;
+        $startRowTeacher=3;
+        $arrClasses=array();
+        $arrPeriods=array();
+        $arrPeriodsTeacher=array();
+        $arrEmployersTeacher=array();
+        $classes=array();
+        $spreadsheet = new Spreadsheet();
+
+
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+        $activeWorksheet->setTitle("Main");
+        $activeWorksheet->setCellValue('A1', 'День недели');
+        $activeWorksheet->setCellValue('B1', 'Урок');
+
+        $teacherSchedule = $spreadsheet->createSheet();
+        $teacherSchedule->setTitle('Teachers');
+        $teacherSchedule->setCellValue('A1', 'Преподаватель');
+
+
+        $classes=DB::table('classes')->where('classes.school_id', '=',Session::get('school_id'))->orderBy('num')->orderBy('ind')->get();
+        $currcol=$startCol;
+        foreach($classes as $class){
+            $activeWorksheet->setCellValue([$currcol,1], $class->num.$class->ind);
+            $arrClasses[$class->id]=$currcol;
+            $currcol++;
+        }
+
+        $weekdays=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+        $weekdaysFull=['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+        $periods=DB::select('select p.id, p.weekday, p.npp
+                            from periods p
+                                join useperiods up on up.period_id=p.id
+                            where up.school_id=:sid
+                            order by weekday, npp', ['sid'=>Session::get('school_id')]);
+        $currrow=$startRow;
+        $currcol=$startColTeacher;
+        $startwd=$startRow;
+        $startwdteacher=$startCol;
+        $currwd=-1;
+        foreach($periods as $one_lesson){
+            if($one_lesson->weekday!=$currwd){
+                if($currwd!=-1){
+                    $activeWorksheet->mergeCells([1, $startwd, 1, $currrow-1]);
+                    $teacherSchedule->mergeCells([$startwdteacher, 1, $currcol-1,1]);
+                }
+                $currwd=$one_lesson->weekday;
+                $startwd=$currrow;
+                $startwdteacher=$currcol;
+            }
+
+            $activeWorksheet->setCellValue([1, $currrow], $weekdays[$one_lesson->weekday]);
+            $activeWorksheet->getStyle([1, $currrow])->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            $activeWorksheet->setCellValue([2, $currrow], $one_lesson->npp);
+            $arrPeriods[$one_lesson->id]=$currrow;
+            $currrow++;
+
+            $teacherSchedule->setCellValue([$currcol,1],$weekdaysFull[$one_lesson->weekday]);
+            $teacherSchedule->getStyle([$currcol,1])->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $teacherSchedule->setCellValue([$currcol,2],$one_lesson->npp);
+            $arrPeriodsTeacher[$one_lesson->id]=$currcol;
+            $currcol++;
+        }
+
+        $activeWorksheet->mergeCells([1, $startwd, 1, $currrow-1]);
+        $teacherSchedule->mergeCells([$startwdteacher, 1, $currcol-1,1]);
+
+
+        $employers=DB::table('employers')->where('employers.school_id', '=',Session::get('school_id'))->orderBy('fio')->get();
+        $currrow=$startRowTeacher;
+        foreach($employers as $employer){
+            $teacherSchedule->setCellValue([1,$currrow], $employer->fio);
+            $arrEmployersTeacher[$employer->id]=$currrow;
+            $currrow++;
+        }
+        $teacherSchedule->getColumnDimension('A')->setWidth(25);
+
+
+        $schedule=DB::select('select s.id as sid, s.period_id, g.id as gid, g.name as gname, g.classe_id, c.num, c.ind, l.id as lid, l.name, r.id as rid, r.number, e.id as eid, e.fio
+                            from schedules s
+                                    join groups g on s.group_id=g.id
+                                    join classes c on c.id=g.classe_id
+                                    join lessons l on l.id=s.lesson_id
+                                    join rooms r on r.id=s.room_id
+                                    join employers e on e.id=s.employer_id
+                            where s.school_id=:sid
+                            ', ['sid'=>Session::get('school_id')]);
+
+        foreach($schedule as $lesson){
+            $activeWorksheet->setCellValue([$arrClasses[$lesson->classe_id], $arrPeriods[$lesson->period_id]], $lesson->name." (".$lesson->num.")");
+            $teacherSchedule->setCellValue([$arrPeriodsTeacher[$lesson->period_id], $arrEmployersTeacher[$lesson->eid]], $lesson->num.$lesson->ind." - ".$lesson->num);
+        }
+
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('./files/'.Session::get('school_id').'-'.date('dmY').'.xlsx');
+
+        $xlsx_files=array();
+        foreach(glob(public_path('files/'.Session::get('school_id').'-*.xlsx')) as $file){
+            $xlsx_files[] = basename($file);
+        }
+
+
+        return view('scheduler.export', compact('xlsx_files'));
 
 
     }

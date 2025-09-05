@@ -9,8 +9,9 @@ let activeTeacherEmployer=0;
 let arrCheckError=new Array();
 
 
-async function start(type){
-    await getScheduleData();
+async function start(type, fetch_url){
+
+    await getScheduleData(fetch_url);
     if(type=='main'){
         clearSchedule();
         fillSchedule();
@@ -31,8 +32,8 @@ async function start(type){
     }
 }
 
-async function getScheduleData(){
-    let schedule=await getData("/schedule/public/api/schedule_data");
+async function getScheduleData(fetch_url){
+    let schedule=await getData(fetch_url);
     arrSchedule=schedule.schedule;
     arrPlan=schedule.plan;
     arrLessons=schedule.lessons;

@@ -1,11 +1,11 @@
 @extends('layouts.schedules')
 
 @section('load_function')
-    onLoad="start('teachers')"
+    onLoad="start('teachers','{{ route('schedule.data')}}')"
 @endsection
 
 @section('menu')
-    <ul class="left_menu"><li><a href="{{ route('home') }}">Расписание</a></li><li><a href="{{ route('schedule.teachers') }}">Учительское расписание</a></li><li><a href="{{ route('schedule.rooms') }}">Расписание по кабинетам</a></li><li><a href="{{ route('refs.index') }}">Справочники</a></li></ul>
+    <ul class="left_menu"><li><a href="{{ route('home') }}">Расписание</a></li><li><a href="{{ route('schedule.teachers') }}">Учительское расписание</a></li><li><a href="{{ route('schedule.rooms') }}">Расписание по кабинетам</a></li><li><a href="{{ route('schedule.export') }}">Выгрузка в excel</a></li><li><a href="{{ route('refs.index') }}">Справочники</a></li></ul>
 @endsection
 
 @section('lessons')
