@@ -162,3 +162,11 @@ body{
     border:#aaa solid 1px;
     white-space: nowrap;
 }
+
+.clicker{
+    cursor: pointer;
+}
+
+span.clicker{
+    text-decoration: underline;
+}

@@ -85,3 +85,13 @@ function render(templateName, model){
     const strHtml=renderFn(model);
     return strHtml;
 }
+
+function confirmSubmitForm(formId, msgText){
+    let answer=confirm(msgText);
+    if(answer){
+        let submitForm=document.querySelector('#'+formId);
+        if(submitForm){
+            submitForm.submit();
+        }
+    }
+}

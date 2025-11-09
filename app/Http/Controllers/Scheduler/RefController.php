@@ -65,7 +65,7 @@ class RefController extends Controller
 
     public function employers(){
         $type='employers';
-        $employers=DB::table('employers')->select('employers.fio')->where('employers.school_id', '=',Session::get('school_id'))->orderBy('fio')->get();
+        $employers=DB::table('employers')->where('employers.school_id', '=',Session::get('school_id'))->orderBy('fio')->get();
         return view('scheduler.ref', compact('type', 'employers'));
     }
 
@@ -74,6 +74,13 @@ class RefController extends Controller
         $new_employer->fio=$request->fio;
         $new_employer->school_id=Session::get('school_id');
         $new_employer->save();
+
+        return $this->employers();
+    }
+
+    public function delete_employer(Request $request){
+        $employer=Employer::find($request->id);
+        $employer->delete();
 
         return $this->employers();
     }

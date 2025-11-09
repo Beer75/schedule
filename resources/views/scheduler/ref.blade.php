@@ -26,7 +26,11 @@
         </form>
         <ul>
         @foreach ($employers as $employer)
-                <li>{{ $employer->fio }}</li>
+                <li>{{ $employer->fio }}<form id="delEmpl{{ $employer->id }}" style="display:inline-block; margin-left:2rem;" action="{{ route('refs.employers.delete') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $employer->id }}">
+                                            <span class="clicker" onClick="confirmSubmitForm('delEmpl{{ $employer->id }}', 'Действительно удалить сотрудника {{ $employer->fio }}?')">Удалить</span>
+                                        </form></li>
         @endforeach
         </ul>
 

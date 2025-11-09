@@ -26,6 +26,8 @@ Route::post('/refs/classes', [RefController::class, 'store_classes'])->name('ref
 Route::post('/refs/groups', [RefController::class, 'store_groups'])->name('refs.groups.store')->middleware(['auth', 'role:scheduler']);
 Route::get('/refs/employers', [RefController::class, 'employers'])->name('refs.employers')->middleware(['auth', 'role:scheduler']);
 Route::post('/refs/employers', [RefController::class, 'store_employers'])->name('refs.employers.store')->middleware(['auth', 'role:scheduler']);
+Route::post('/refs/del_employer', [RefController::class, 'delete_employer'])->name('refs.employers.delete')->middleware(['auth', 'role:scheduler']);
+
 Route::get('/refs/rooms', [RefController::class, 'rooms'])->name('refs.rooms')->middleware(['auth', 'role:scheduler']);
 Route::post('/refs/rooms', [RefController::class, 'store_rooms'])->name('refs.rooms.store')->middleware(['auth', 'role:scheduler']);
 Route::get('/refs/rings', [RefController::class, 'rings'])->name('refs.rings')->middleware(['auth', 'role:scheduler']);
