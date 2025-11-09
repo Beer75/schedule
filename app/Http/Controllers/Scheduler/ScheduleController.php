@@ -248,8 +248,16 @@ class ScheduleController extends Controller
                             ', ['sid'=>Session::get('school_id')]);
 
         foreach($schedule as $lesson){
-            $activeWorksheet->setCellValue([$arrClasses[$lesson->classe_id], $arrPeriods[$lesson->period_id]], $lesson->name." (".$lesson->num.")");
-            $teacherSchedule->setCellValue([$arrPeriodsTeacher[$lesson->period_id], $arrEmployersTeacher[$lesson->eid]], $lesson->num.$lesson->ind." - ".$lesson->num);
+            $mainVal=$activeWorksheet->getCell([$arrClasses[$lesson->classe_id], $arrPeriods[$lesson->period_id]])->getValue();
+            $newVal=(strlen($mainVal)>1)?$mainVal."\n".$lesson->name." (".$lesson->number.")":$lesson->name." (".$lesson->number.")";
+
+
+            // $teachVal=$activeWorksheet->getCell([$arrPeriodsTeacher[$lesson->period_id], $arrEmployersTeacher[$lesson->eid]])->getValue();
+
+            $activeWorksheet->setCellValue([$arrClasses[$lesson->classe_id], $arrPeriods[$lesson->period_id]], $newVal);
+            $activeWorksheet->getStyle([$arrClasses[$lesson->classe_id], $arrPeriods[$lesson->period_id]])->getAlignment()->setWrapText(true);
+            $teacherSchedule->setCellValue([$arrPeriodsTeacher[$lesson->period_id], $arrEmployersTeacher[$lesson->eid]], $lesson->num.$lesson->ind." - ".$lesson->number);
+            // $teacherSchedule->setCellValue([$arrPeriodsTeacher[$lesson->period_id], $arrEmployersTeacher[$lesson->eid]], $teachVal."\n".$lesson->num.$lesson->ind." - ".$lesson->num);
         }
 
 

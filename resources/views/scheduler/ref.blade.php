@@ -117,10 +117,33 @@
 
     @if($type==='plans')
         <h2>Учебный план</h2>
+        <form action="{{ route('refs.plans.store') }}" method="POST">
+            @csrf
+            <select name="group_id">
+            @foreach ($groups as $group)
+                <option value="{{ $group->id }}">{{ $group->num }}{{ $group->ind }} - {{ $group->name }}</option>
+            @endforeach
+            </select>
+
+            <select name="lesson_id">
+            @foreach ($lessons as $lesson)
+                <option value="{{ $lesson->id }}">{{ $lesson->name }}</option>
+            @endforeach
+            </select>
+
+            <select name="employer_id">
+            @foreach ($employers as $employer)
+                <option value="{{ $employer->id }}">{{ $employer->fio }}</option>
+            @endforeach
+            </select>
+
+            <input type="text" name="quantity" placeholder="Часов в неделю" hint="Часов в неделю" value="1" required>
+            <button type="submit">Добавить</button>
+        </form>
         @php
            $first_rec=1;
         @endphp
-        <table>
+        <table class="stripped_table" cellspacing="0">
         @foreach ($plans as $plan)
             @if($loop->first)
                 @php
@@ -173,29 +196,7 @@
         @endforeach
         </table>
 
-        <form action="{{ route('refs.plans.store') }}" method="POST">
-            @csrf
-            <select name="group_id">
-            @foreach ($groups as $group)
-                <option value="{{ $group->id }}">{{ $group->num }}{{ $group->ind }} - {{ $group->name }}</option>
-            @endforeach
-            </select>
 
-            <select name="lesson_id">
-            @foreach ($lessons as $lesson)
-                <option value="{{ $lesson->id }}">{{ $lesson->name }}</option>
-            @endforeach
-            </select>
-
-            <select name="employer_id">
-            @foreach ($employers as $employer)
-                <option value="{{ $employer->id }}">{{ $employer->fio }}</option>
-            @endforeach
-            </select>
-
-            <input type="text" name="quantity" placeholder="Часов в неделю" hint="Часов в неделю" value="1" required>
-            <button type="submit">Добавить</button>
-        </form>
     @endif
 
     @if($type==='statistic')

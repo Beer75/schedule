@@ -10,6 +10,7 @@
     <title>Расписание</title>
 </head>
 <body @yield('load_function')>
+    <div class="all">
     <div class="top"> @yield('menu') <ul class="right_menu"><li><a href="{{ route('profile') }}">Профиль - {{ Auth::user()->name }}</a></li><li><a href="{{ route('logout') }}">Выход</a></li></ul></div>
     <div class="center">
 
@@ -18,6 +19,7 @@
         </div>
     </div>
     <div class="bottom">@yield('bottom')</div>
+    </div>
     <div class="modal" id="addLessonModalForm">
         <div class="modal_content">
             <h3 class="modal_title">Новая запись</h3>

@@ -14,6 +14,12 @@
 
 }
 
+.s_row:first-child{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
 
 .s_weekday{
     display: flex;
@@ -53,12 +59,20 @@
 
 .sr_title{
     width: 10rem;
+    position: sticky;
+    left: 0;
+    z-index: 1;
 }
 
 .sr_weekday{
     width: 10rem;
     text-align: center;
     align-self: center;
+
+    position: sticky;
+    left: 0;
+    z-index: 1;
+
 }
 
 .sс_weekday{
@@ -70,11 +84,16 @@
 .sr_npp{
     width: 10rem;
     text-align: center;
+    position: sticky;
+    left: 10rem;
+    z-index: 2;
 }
 
 .sc_npp{
     width: 3.5rem;
     text-align: center;
+
+
 }
 
 .sc_lesson{
