@@ -166,7 +166,8 @@ function clearAndFillTeacherPlan(){
     arrEPlan.forEach(item=>{
         let scheduleLessons=arrSchedule.filter(sch_item => (sch_item.gid==item.gid && sch_item.lid==item.lid && sch_item.eid==item.eid));
         item.need=item.quantity-scheduleLessons.length;
-        plan_list.innerHTML=plan_list.innerHTML+render("teacherSchedulePlan", item);
+        if(item.need>0)
+            plan_list.innerHTML=plan_list.innerHTML+render("teacherSchedulePlan", item);
     });
 
 }

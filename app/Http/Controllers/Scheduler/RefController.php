@@ -131,19 +131,12 @@ class RefController extends Controller
         return $this->lessons();
     }
 
-    public function plans(){
+    public function plans(Request $request){
         $type='plans';
         $employers=DB::table('employers')->where('employers.school_id', '=',Session::get('school_id'))->orderBy('fio')->get();
         $classes=Classe::with('groups')->where('school_id', '=',Session::get('school_id'))->orderBy('num')->orderBy('ind')->get();
-        $groups=DB::table('groups')->select('groups.id', 'groups.name', 'groups.classe_id', 'classes.num', 'classes.ind')->join('classes', 'groups.classe_id', '=','classes.id')-> where('classes.school_id', '=',Session::get('school_id'))->orderBy('groups.name')->get();
+        $groups=DB::table('groups')->select('groups.id', 'groups.name', 'groups.classe_id', 'classes.num', 'classes.ind')->join('classes', 'groups.classe_id', '=','classes.id')-> where('classes.school_id', '=',Session::get('school_id'))->orderBy('classes.num')->orderBy('classes.ind')->get();
         $lessons=DB::table('lessons')->orderBy('name')->get();
-        // $plans=DB::table('plans')->join()select('')->orderBy('lesson_id')->get();
-        // $plans=DB::select('select p.lesson_id, p.group_id, g.name, g.classe_id, c.num, c.ind, CONCAT(c.num,c.ind) as cname, p.employer_id, p.quantity, l.name
-        //                     from plans p join lessons l on l.id=p.lesson_id
-        //                                  right join groups g on g.id=p.group_id
-        //                                  join classes c on c.id=g.classe_id
-        //                     where c.school_id=:sid
-        //                     order by lesson_id, num, ind', ['sid'=>Session::get('school_id')]);
 
         $plans=DB::select('select l.id as lid, l.name as lname, g.id as gid, g.name as gname, g.classe_id, c.id as cid, c.num, c.ind, CONCAT(c.num,c.ind) as cname, FORMAT(p.quantity,0) as quantity
                             from lessons l
@@ -153,7 +146,9 @@ class RefController extends Controller
                             where c.school_id=:sid
                             order by lname, num, ind, gid', ['sid'=>Session::get('school_id')]);
                             // dd($plans);
-        return view('scheduler.ref', compact('type', 'plans', 'employers', 'groups', 'lessons', 'classes'));
+
+        $inputData=$request->all();
+        return view('scheduler.ref', compact('type', 'plans', 'employers', 'groups', 'lessons', 'classes', 'inputData'));
     }
 
     public function store_plans(Request $request){
@@ -163,7 +158,7 @@ class RefController extends Controller
         $new_plan->employer_id=$request->employer_id;
         $new_plan->quantity=$request->quantity;
         $new_plan->save();
-        return $this->plans();
+        return $this->plans($request);
     }
 
 

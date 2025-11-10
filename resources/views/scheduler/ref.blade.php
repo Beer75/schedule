@@ -125,23 +125,23 @@
             @csrf
             <select name="group_id">
             @foreach ($groups as $group)
-                <option value="{{ $group->id }}">{{ $group->num }}{{ $group->ind }} - {{ $group->name }}</option>
+                <option value="{{ $group->id }}" {{ ($inputData['group_id']??'') == $group->id ? 'selected' : '' }}>{{ $group->num }}{{ $group->ind }} - {{ $group->name }}</option>
             @endforeach
             </select>
 
             <select name="lesson_id">
             @foreach ($lessons as $lesson)
-                <option value="{{ $lesson->id }}">{{ $lesson->name }}</option>
+                <option value="{{ $lesson->id }}" {{ ($inputData['lesson_id']??'') == $lesson->id ? 'selected' : '' }}>{{ $lesson->name }}</option>
             @endforeach
             </select>
 
             <select name="employer_id">
             @foreach ($employers as $employer)
-                <option value="{{ $employer->id }}">{{ $employer->fio }}</option>
+                <option value="{{ $employer->id }}" {{ ($inputData['employer_id']??'') == $employer->id ? 'selected' : '' }}>{{ $employer->fio }}</option>
             @endforeach
             </select>
 
-            <input type="text" name="quantity" placeholder="Часов в неделю" hint="Часов в неделю" value="1" required>
+            <input type="number" name="quantity" placeholder="Часов в неделю" hint="Часов в неделю" value="1" min="1" max="5" step="1" required>
             <button type="submit">Добавить</button>
         </form>
         @php
