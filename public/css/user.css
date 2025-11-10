@@ -127,6 +127,26 @@ body{
     color: brown;
 }
 
+.simple_stripped_table{
+    border:#aaa solid 1px;
+    margin: 0.5rem;
+}
+.simple_stripped_table tbody tr:nth-child(odd){
+    background-color: #eee;
+}
+.simple_stripped_table tbody tr:nth-child(even){
+    background-color: #ccc;
+}
+.simple_stripped_table th{
+    border:#aaa solid 1px;
+    white-space: nowrap;
+}
+.simple_stripped_table td{
+    border:#aaa solid 1px;
+    white-space: nowrap;
+}
+
+
 .stripped_table tbody tr:nth-child(odd){
     background-color: #eee;
 }

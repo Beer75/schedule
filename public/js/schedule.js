@@ -1,3 +1,5 @@
+// Schedules functions
+
 let arrSchedule;
 let arrLessons;
 let arrRooms;
@@ -8,9 +10,8 @@ let activeTeacherPeriod=0;
 let activeTeacherEmployer=0;
 let arrCheckError=new Array();
 
-
+// Get actual data
 async function start(type, fetch_url){
-
     await getScheduleData(fetch_url);
     if(type=='main'){
         clearSchedule();
@@ -23,7 +24,6 @@ async function start(type, fetch_url){
         fillScheduleTeachers();
         document.querySelector('.schedule').addEventListener('click', clickLessonTeachers);
         document.querySelector('.teacher_plan').addEventListener('click', clickLessonTeachersPlan);
-
     }
 
     if(type=='rooms'){
@@ -40,7 +40,6 @@ async function getScheduleData(fetch_url){
     arrRooms=schedule.rooms;
     arrEmployers=schedule.employers;
     arrGroups=schedule.groups;
-
 }
 
 function clearSchedule(){

@@ -1,7 +1,7 @@
 @extends('layouts.refs')
 
 @section('menu')
-    <ul class="left_menu"><li><a href="{{ route('home') }}">Расписание</a></li><li><a href="{{ route('schedule.teachers') }}">Учительское расписание</a></li><li><a href="{{ route('schedule.rooms') }}">Расписание по кабинетам</a></li><li><a href="{{ route('refs.index') }}">Справочники</a></li></ul>
+    <ul class="left_menu"><li><a href="{{ route('home') }}">Расписание</a></li><li><a href="{{ route('schedule.teachers') }}">Учительское расписание</a></li><li><a href="{{ route('schedule.rooms') }}">Расписание по кабинетам</a></li><li><a href="{{ route('schedule.export') }}">Выгрузка в excel</a></li><li><a href="{{ route('refs.index') }}">Справочники</a></li></ul>
 @endsection
 
 @section('left')
@@ -24,15 +24,34 @@
             <input type="text" name="fio" placeholder="ФИО" required>
             <button type="submit">Добавить</button>
         </form>
-        <ul>
-        @foreach ($employers as $employer)
+        {{-- <ul> --}}
+        {{-- @foreach ($employers as $employer)
                 <li>{{ $employer->fio }}<form id="delEmpl{{ $employer->id }}" style="display:inline-block; margin-left:2rem;" action="{{ route('refs.employers.delete') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $employer->id }}">
                                             <span class="clicker" onClick="confirmSubmitForm('delEmpl{{ $employer->id }}', 'Действительно удалить сотрудника {{ $employer->fio }}?')">Удалить</span>
                                         </form></li>
+        @endforeach --}}
+        <table class="simple_stripped_table" cellspacing="0">
+            <tr><th>ФИО</th><th>Кол-во часов</th><th>&nbsp;</th></tr>
+            <tbody>
+        @foreach ($empls as $employer)
+                <tr><td>{{ $employer->fio }}</td>
+                    @if($employer->quantity>0)
+                        <td align="center">{{ round($employer->quantity) }}</td>
+                    @else
+                        <td>&nbsp;</td>
+                    @endif
+                    <td>
+                    <form id="delEmpl{{ $employer->id }}" style="display:inline-block; margin-left:2rem;" action="{{ route('refs.employers.delete') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $employer->id }}">
+                                            <span class="clicker" onClick="confirmSubmitForm('delEmpl{{ $employer->id }}', 'Действительно удалить сотрудника {{ $employer->fio }}?')">Удалить</span>
+                                        </form></td></tr>
         @endforeach
-        </ul>
+        </tbody>
+        </table>
+        {{-- </ul> --}}
 
     @endif
 

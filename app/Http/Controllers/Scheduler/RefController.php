@@ -66,7 +66,13 @@ class RefController extends Controller
     public function employers(){
         $type='employers';
         $employers=DB::table('employers')->where('employers.school_id', '=',Session::get('school_id'))->orderBy('fio')->get();
-        return view('scheduler.ref', compact('type', 'employers'));
+        $empls=DB::select('select e.id, e.fio, sum(p.quantity) quantity
+                            from employers e left join plans p on p.employer_id=e.id
+                            where e.school_id=:sid
+                            group by id, fio
+                            order by fio', ['sid'=>Session::get('school_id')]);
+
+        return view('scheduler.ref', compact('type', 'employers', 'empls'));
     }
 
     public function store_employers(Request $request){
