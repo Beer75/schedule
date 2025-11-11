@@ -50,6 +50,10 @@ Route::post('/api/add_lesson', [ScheduleController::class, 'addLesson'])->name('
 Route::post('/api/edit_lesson', [ScheduleController::class, 'editLesson'])->name('schedule.lesson.edit')->middleware(['auth', 'role:scheduler']);
 Route::post('/api/del_lesson', [ScheduleController::class, 'delLesson'])->name('schedule.lesson.del')->middleware(['auth', 'role:scheduler']);
 
+Route::get('/api/studyplan_data', [RefController::class, 'getStudyplanData'])->name('studyplan.data')->middleware(['auth', 'role:scheduler']);
+Route::post('/api/studyplan_add', [RefController::class, 'addStudyplan'])->name('studyplan.add')->middleware(['auth', 'role:scheduler']);
+Route::post('/api/studyplan_edit', [RefController::class, 'editStudyplan'])->name('studyplan.edit')->middleware(['auth', 'role:scheduler']);
+Route::post('/api/studyplan_del', [RefController::class, 'delStudyplan'])->name('studyplan.del')->middleware(['auth', 'role:scheduler']);
 
 
 

@@ -1,5 +1,19 @@
 @extends('layouts.refs')
 
+@section('load_function')
+    @if($type==='plans')
+        onLoad="start('{{ route('studyplan.data')}}')"
+    @endif
+@endsection
+
+@section('employers')
+    @if($type==='plans')
+        @foreach ($employers as $employer)
+            <option value="{{$employer->id}}">{{$employer->fio}}</option>
+        @endforeach
+    @endif
+@endsection
+
 @section('menu')
     <ul class="left_menu"><li><a href="{{ route('home') }}">Расписание</a></li><li><a href="{{ route('schedule.teachers') }}">Учительское расписание</a></li><li><a href="{{ route('schedule.rooms') }}">Расписание по кабинетам</a></li><li><a href="{{ route('schedule.export') }}">Выгрузка в excel</a></li><li><a href="{{ route('refs.index') }}">Справочники</a></li></ul>
 @endsection
@@ -160,29 +174,35 @@
             @endforeach
             </select>
 
-            <input type="number" name="quantity" placeholder="Часов в неделю" hint="Часов в неделю" value="1" min="1" max="5" step="1" required>
+            <input type="number" name="quantity" placeholder="Часов в неделю" hint="Часов в неделю" value="1" min="1" max="15" step="1" required>
             <button type="submit">Добавить</button>
         </form>
         @php
-           $first_rec=1;
+           $first_rec=1; // Записи с первым предметом, первая строка в таблице
         @endphp
-        <table class="stripped_table" cellspacing="0">
+        <table id="study_plan" class="stripped_table" cellspacing="0">
         @foreach ($plans as $plan)
             @if($loop->first)
                 @php
-                    $first_lid=$plan->lid;
-                    $first_th="<tr><td>".$plan->lname."</td>";
+                    $first_lid=$plan->lid; // Текущий предмет
+                    $first_th="<tr><td>".$plan->lname."</td>"; // Первую строку формируем в переменную, т.к. параллельно формируется заголовок таблицы
                 @endphp
                 <tr><th>Предмет</th>
             @endif
 
+            {{-- Все еще генерируем первую строку --}}
             @if($first_lid==$plan->lid && $first_rec==1)
                 @php
-                    $first_th.="<td>".$plan->quantity."</td>";
+                    if($plan->quantity)
+                        $first_th.="<td class='clicker' data-pid='".$plan->pid."' data-eid='".$plan->eid."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='".$plan->quantity."'>".$plan->quantity."</td>";
+                    else
+                        $first_th.="<td class='clicker' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='0'>&nbsp;</td>";
+
                 @endphp
                 <th>{{ $plan->num }}{{ $plan->ind }} ({{ $plan->gname }})</th>
             @endif
 
+            {{-- Предмет сменился, финишируем заголовок и первую строку. Стартуем новый предмет. --}}
             @if($first_lid!=$plan->lid && $first_rec==1)
                 @php
                     $first_rec=0;
@@ -196,8 +216,7 @@
 
             @endif
 
-
-
+            {{-- Предмет сменился, переходим к следующему --}}
             @if($first_lid!=$plan->lid && $first_rec==0)
                 </tr>
                 @php
@@ -207,8 +226,15 @@
 
             @endif
 
+            {{-- Продолжаем генерировать строку предмета --}}
             @if($first_lid==$plan->lid && $first_rec==0)
-                <td>{{ $plan->quantity }}</td>
+                {{-- <td>{{ $plan->quantity }}</td> --}}
+                @php
+                    if($plan->quantity)
+                        echo "<td class='clicker' data-pid='".$plan->pid."' data-eid='".$plan->eid."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='".$plan->quantity."'>".$plan->quantity."</td>";
+                    else
+                        echo "<td class='clicker' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='0'>&nbsp;</td>";
+                @endphp
 
             @endif
 

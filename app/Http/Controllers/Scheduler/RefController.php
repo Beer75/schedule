@@ -144,11 +144,12 @@ class RefController extends Controller
         $groups=DB::table('groups')->select('groups.id', 'groups.name', 'groups.classe_id', 'classes.num', 'classes.ind')->join('classes', 'groups.classe_id', '=','classes.id')-> where('classes.school_id', '=',Session::get('school_id'))->orderBy('classes.num')->orderBy('classes.ind')->get();
         $lessons=DB::table('lessons')->orderBy('name')->get();
 
-        $plans=DB::select('select l.id as lid, l.name as lname, g.id as gid, g.name as gname, g.classe_id, c.id as cid, c.num, c.ind, CONCAT(c.num,c.ind) as cname, FORMAT(p.quantity,0) as quantity
+        $plans=DB::select('select l.id as lid, l.name as lname, g.id as gid, g.name as gname, g.classe_id, c.id as cid, c.num, c.ind, CONCAT(c.num,c.ind) as cname, p.id as pid, FORMAT(p.quantity,0) as quantity, p.employer_id as eid, e.fio
                             from lessons l
                                          join groups g
                                          join classes c on c.id=g.classe_id
                                          left join plans p on p.group_id=g.id and p.lesson_id=l.id
+                                         left join employers e on p.employer_id=e.id
                             where c.school_id=:sid
                             order by lname, num, ind, gid', ['sid'=>Session::get('school_id')]);
                             // dd($plans);
@@ -158,13 +159,86 @@ class RefController extends Controller
     }
 
     public function store_plans(Request $request){
-        $new_plan=new Plan();
-        $new_plan->group_id=$request->group_id;
-        $new_plan->lesson_id=$request->lesson_id;
-        $new_plan->employer_id=$request->employer_id;
-        $new_plan->quantity=$request->quantity;
-        $new_plan->save();
+        if(Plan::where(['group_id'=>$request->group_id,
+                        'lesson_id'=>$request->lesson_id])->doesntExist()){
+            $new_plan=new Plan();
+            $new_plan->group_id=$request->group_id;
+            $new_plan->lesson_id=$request->lesson_id;
+            $new_plan->employer_id=$request->employer_id;
+            $new_plan->quantity=$request->quantity;
+            $new_plan->save();
+        }
         return $this->plans($request);
+    }
+
+    public function getStudyplanData(Request $request){
+        $plan=DB::select('select p.id as pid, g.id as gid, g.name as gname, g.classe_id, c.num, c.ind, l.id as lid, l.name, e.id as eid, e.fio, FORMAT(p.quantity,0) as quantity
+                            from plans p
+                                    join groups g on p.group_id=g.id
+                                    join classes c on c.id=g.classe_id
+                                    join lessons l on l.id=p.lesson_id
+                                    join employers e on e.id=p.employer_id
+                            where c.school_id=:sid
+                            ', ['sid'=>Session::get('school_id')]);
+        $result['plan']=$plan;
+        $groups=DB::select('select g.id, g.classe_id, g.name, c.num, c.ind
+                            from groups g
+                                    join classes c on c.id=g.classe_id
+                            where c.school_id=:sid
+                            ', ['sid'=>Session::get('school_id')]);
+        $result['groups']=$groups;
+        $employers=DB::table('employers')->where('employers.school_id', '=',Session::get('school_id'))->orderBy('fio')->get();
+        $result['employers']=$employers;
+        $lessons=DB::table('lessons')->orderBy('name')->get();
+        $result['lessons']=$lessons;
+        return response()->json($result);
+    }
+
+    public function addStudyplan(Request $request){
+        if(Plan::where(['group_id'=>$request->gid,
+                        'lesson_id'=>$request->lid])->doesntExist()){
+            $new_plan=new Plan();
+            $new_plan->group_id=$request->gid;
+            $new_plan->lesson_id=$request->lid;
+            $new_plan->employer_id=$request->eid;
+            $new_plan->quantity=$request->q;
+            $result['status']=$new_plan->save()?1:0;
+            $result['error']="Ошибка сохранения";
+            $result['pid']=$new_plan->id;
+        }
+        else{
+            $result['status']=0;
+            $result['error']="Запись по данному предмету в данной группе уже есть.";
+        }
+
+        return response()->json($result);
+
+    }
+
+    public function editStudyplan(Request $request){
+
+        $plan=Plan::find($request->pid);
+        if($plan!==null){
+            $plan->employer_id=$request->eid;
+            $plan->quantity=$request->q;
+            $result['status']=$plan->save()?1:0;
+            $result['error']="Ошибка сохранения";
+        }
+        else{
+            $result['status']=0;
+            $result['error']="Запись не найдена";
+        }
+
+        return response()->json($result);
+
+    }
+
+    public function delStudyplan(Request $request){
+        $count=Plan::destroy($request->pid);
+
+        $result['status']=$count;
+        $result['error']="Запись не найдена";
+        return response()->json($result);
     }
 
 
