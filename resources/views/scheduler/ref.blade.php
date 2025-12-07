@@ -77,6 +77,21 @@
             <input type="text" name="ind" placeholder="буква" required>
             <button type="submit">Добавить</button>
         </form>
+
+
+        <div class="ref_classes_list">
+            <div class="ref_classes_line" data-line="1"></div>
+            <div class="ref_classes_line" data-line="2"></div>
+            <div class="ref_classes_line" data-line="3"></div>
+            <div class="ref_classes_line" data-line="4"></div>
+            <div class="ref_classes_line" data-line="5"></div>
+            <div class="ref_classes_line" data-line="6"></div>
+            <div class="ref_classes_line" data-line="7"></div>
+            <div class="ref_classes_line" data-line="8"></div>
+            <div class="ref_classes_line" data-line="9"></div>
+            <div class="ref_classes_line" data-line="10"></div>
+            <div class="ref_classes_line" data-line="11"></div>
+        </div>
         <ul>
         @foreach ($classes as $class)
             <li>{{ $class->num }}{{ $class->ind }}</li>
@@ -87,6 +102,7 @@
             </ul>
         @endforeach
         </ul>
+
 
         <h3>Новая группа</h3>
         <form action="{{ route('refs.groups.store') }}" method="POST">
@@ -194,12 +210,12 @@
             @if($first_lid==$plan->lid && $first_rec==1)
                 @php
                     if($plan->quantity)
-                        $first_th.="<td class='clicker' data-pid='".$plan->pid."' data-eid='".$plan->eid."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='".$plan->quantity."'>".$plan->quantity."</td>";
+                        $first_th.="<td class='clicker line".$plan->num."' data-pid='".$plan->pid."' data-eid='".$plan->eid."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='".$plan->quantity."'>".$plan->quantity."</td>";
                     else
-                        $first_th.="<td class='clicker' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='0'>&nbsp;</td>";
+                        $first_th.="<td class='clicker line".$plan->num."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='0'>&nbsp;</td>";
 
                 @endphp
-                <th>{{ $plan->num }}{{ $plan->ind }} ({{ $plan->gname }})</th>
+                <th class='line{{ $plan->num }}'>{{ $plan->num }}{{ $plan->ind }} ({{ $plan->gname }})</th>
             @endif
 
             {{-- Предмет сменился, финишируем заголовок и первую строку. Стартуем новый предмет. --}}
@@ -231,9 +247,9 @@
                 {{-- <td>{{ $plan->quantity }}</td> --}}
                 @php
                     if($plan->quantity)
-                        echo "<td class='clicker' data-pid='".$plan->pid."' data-eid='".$plan->eid."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='".$plan->quantity."'>".$plan->quantity."</td>";
+                        echo "<td class='clicker line".$plan->num."' data-pid='".$plan->pid."' data-eid='".$plan->eid."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='".$plan->quantity."'>".$plan->quantity."</td>";
                     else
-                        echo "<td class='clicker' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='0'>&nbsp;</td>";
+                        echo "<td class='clicker line".$plan->num."' data-lid='".$plan->lid."' data-gid='".$plan->gid."' data-q='0'>&nbsp;</td>";
                 @endphp
 
             @endif
