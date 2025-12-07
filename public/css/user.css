@@ -173,6 +173,12 @@ body{
     background-color: inherit;
 }
 
+.stripped_table th:first-child{
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background-color: inherit;
+}
 .stripped_table tr:hover td{
     background-color: rgb(243, 189, 212);
 }
