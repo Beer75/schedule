@@ -66,7 +66,7 @@
                     <div class="s_lesson_row">
                     <div class="sr_npp">{{$period->npp}}</div>
                     @foreach ($classes as $class)
-                        <div class="sr_lesson" data-period="{{$period->id}}" data-class="{{$class->id}}"></div>
+                        <div class="sr_lesson line{{$class->num}}" data-period="{{$period->id}}" data-class="{{$class->id}}"></div>
                     @endforeach
                     </div>
 

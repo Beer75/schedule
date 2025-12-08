@@ -151,7 +151,7 @@
 .sr_lesson
 {
     width: 10rem;
-    border-left: 1px solid #aaa;
+    border: 1px solid #aaa;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -202,35 +202,35 @@
 
 /* Colors for class number */
 .line1{
-    background-color: rgb(250, 220, 180);
+    background-color: rgb(250, 240, 225);
 }
 .line2{
-    background-color: rgb(250, 220, 180);
+    background-color: rgb(255, 220, 165);
 }
 .line3{
-    background-color: rgb(250, 220, 180);
+    background-color: rgb(250, 240, 225);
 }
 .line4{
-    background-color: rgb(250, 220, 180);
+    background-color: rgb(255, 220, 165);
 }
 .line5{
-    background-color: rgb(195, 250, 125);
+    background-color: rgb(210, 235, 175);
 }
 .line6{
-    background-color: rgb(165, 250, 125);
+    background-color: rgb(160, 180, 135);
 }
 .line7{
-    background-color: rgb(135, 250, 125);
+    background-color: rgb(210, 235, 175);
 }
 .line8{
-    background-color: rgb(105, 250, 125);
+    background-color: rgb(160, 180, 135);
 }
 .line9{
-    background-color: rgb(75, 250, 125);
+    background-color: rgb(250, 240, 225);
 }
 .line10{
-    background-color: rgb(105, 205, 250);
+    background-color: rgb(255, 220, 165);
 }
 .line11{
-    background-color: rgb(105, 190, 250);
+    background-color: rgb(250, 240, 225);
 }
